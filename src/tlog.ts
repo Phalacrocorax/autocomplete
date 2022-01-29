@@ -1,11 +1,22 @@
 const types: Fig.Generator = {
   script:
-    "echo learn:feed learn:korean workout:stretch other:work side:raysys side:dothack life: contents: practice:",
+    "echo learn:feed learn:korean workout:stretch other:work side:raysys side:dothack dev: life: contents: practice:",
   postProcess: (output) => {
-    return output.split(" ").map((branch) => {
+    return output.split(" ").map((item) => {
       return {
-        name: branch.replace("*", "").trim(),
+        name: item.replace("*", "").trim(),
         description: "Contents Type",
+      };
+    });
+  },
+};
+const times: Fig.Generator = {
+  script: 'printf "%\'#.2d:00:00\\n" {0..23}',
+  postProcess: (output) => {
+    return output.split("\n").map((item) => {
+      return {
+        name: item.replace("*", "").trim(),
+        description: "Start Time",
       };
     });
   },
@@ -39,6 +50,16 @@ const completionSpec: Fig.Spec = {
     {
       name: "-p",
       description: "Period",
+      args: { isOptional: false },
+    },
+    {
+      name: "-s",
+      description: "Period",
+      args: {
+        name: "Contents Type",
+        isOptional: false,
+        generators: times,
+      },
     },
     {
       name: "-d",
